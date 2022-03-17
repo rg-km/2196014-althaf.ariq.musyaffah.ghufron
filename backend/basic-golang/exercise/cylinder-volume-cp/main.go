@@ -18,4 +18,18 @@ import (
 
 func main() {
 	// TODO: answer here
+	var (
+		jarijari float32
+		tinggi   float32
+	)
+
+	fmt.Printf("Masukkan jari-jari alas tabung : ")
+	fmt.Scan(&jarijari)
+	fmt.Printf("Masukkan tinggi tabung : ")
+	fmt.Scan(&tinggi)
+
+	var volume = 3.14 * jarijari * jarijari * tinggi
+
+	fmt.Printf("Volume tabung adalah : %f\n", volume)
+
 }
