@@ -2,6 +2,8 @@ package main
 
 import (
 	// TODO: answer here
+	"fmt"
+	"time"
 )
 
 // Dari contoh yang telah diberikan dan eksplorasi yang dilakukan dari standard library golang, kamu dapat mencoba untuk mengimport salah satu package pada golang.
@@ -9,11 +11,15 @@ import (
 
 func CountDays(start, end time.Time) int {
 	// TODO: answer here
+	duration := end.Sub(start).Hours()
+	days := duration / 24
+	return int(days)
+
 }
 
 func main() {
 	start := time.Date(2022, time.March, 21, 0, 0, 0, 0, time.UTC)
 	end := time.Date(2022, time.March, 27, 0, 0, 0, 0, time.UTC)
 	dayDifference := CountDays(start, end)
-	fmt.Println(dayDifference)
+	fmt.Println("selisih hari", dayDifference)
 }

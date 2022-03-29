@@ -13,6 +13,10 @@ type Todos struct {
 
 func (todos *Todos) Add(item Item) {
 	// TODO: answer here
+	todos = &Todos{
+		Title = "Buy milk",
+		Deadline = time.Now().Add(-time.Hour),
+	}
 }
 
 func (todos *Todos) GetAll() []Item {
