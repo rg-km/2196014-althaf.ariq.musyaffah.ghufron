@@ -1,10 +1,8 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 )
 
 // Dari contoh sebelumnya tambahkan filter untuk
@@ -25,8 +23,7 @@ func TableHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 
 		// TODO: answer here
-		http.Error(w, `{"status":"table not found"}`, http.StatusNotFound)
-		return
+
 	}
 
 	http.Error(w, "", http.StatusBadRequest)

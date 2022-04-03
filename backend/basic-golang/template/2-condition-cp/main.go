@@ -19,4 +19,32 @@ type Account struct {
 func ExecuteToByteBuffer(account Account) ([]byte, error) {
 	var textTemplate string
 	// TODO: answer here
+	textTemplate = "{{if (eq .Balance 0)}}" +
+		"Akun {{.Name}} dengan Nomor {{.Number}} tidak memiliki saldo." +
+		"{{ else }}Akun {{.Name}} dengan Nomor {{.Number}} memiliki saldo sebesar ${{.Balance}}." +
+		"{{ end }}"
+
+	tmpl, err := template.New("account").Parse(textTemplate)
+	if err != nil {
+		return nil, err
+	}
+
+	var buf bytes.Buffer
+	err = tmpl.Execute(&buf, account)
+	if err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
+
 }
+
+// func main() {
+// 	account := Account{
+// 		Name:    "Marwan",
+// 		Number:  "12345",
+// 		Balance: 10000,
+// 	}
+
+// 	res, _ := ExecuteToByteBuffer(account)
+// 	fmt.Println(string(res))
+// }
