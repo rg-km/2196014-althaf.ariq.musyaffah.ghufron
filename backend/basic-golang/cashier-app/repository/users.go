@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"fmt"
-	"strconv"
+	// "fmt"
+	// "strconv"
 
 	"github.com/ruang-guru/playground/backend/basic-golang/cashier-app/db"
 )
@@ -40,10 +40,10 @@ func (u *UserRepository) Save(users []User) error {
 }
 
 func (u *UserRepository) changeStatus(username string, status bool) error {
-	users, err := u.LoadOrCreate()
-	if err != nil {
-		return err
-	}
+	// users, err := u.LoadOrCreate()
+	// if err != nil {
+	// 	return err
+	// }
 
 	return nil // TODO: replace this
 }

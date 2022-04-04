@@ -53,8 +53,18 @@ func (api *API) addToCart(w http.ResponseWriter, req *http.Request) {
 
 func (api *API) clearCart(w http.ResponseWriter, req *http.Request) {
 	// TODO: answer here
+	//clear cart
 }
 
 func (api *API) cartList(w http.ResponseWriter, req *http.Request) {
-	encoder.Encode(CartListSuccessResponse{CartItems: []repository.CartItem{}}) // TODO: replace this
+	encoder := json.NewEncoder(w)
+
+	cartItems, err := api.cartItemRepo.SelectAll()
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		encoder.Encode(CartErrorResponse{Error: err.Error()})
+		return
+	}
+
+	encoder.Encode(CartListSuccessResponse{CartItems: cartItems})
 }

@@ -69,10 +69,10 @@ func (u *CartItemRepository) SelectAll() ([]CartItem, error) {
 }
 
 func (u *CartItemRepository) Add(product Product) error {
-	cartItems, err := u.LoadOrCreate()
-	if err != nil {
-		return err
-	}
+	// cartItems, err := u.LoadOrCreate()
+	// if err != nil {
+	// 	return err
+	// }
 
 	return nil // TODO: replace this
 }

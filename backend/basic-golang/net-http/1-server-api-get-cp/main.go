@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 )
 
 // Dari contoh sebelumnya tambahkan filter untuk
@@ -24,6 +26,31 @@ func TableHandler(w http.ResponseWriter, r *http.Request) {
 
 		// TODO: answer here
 
+		total := r.Form["total"]
+
+		convTotal, err := strconv.Atoi(total[0])
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		for _, table := range data {
+
+			if table.Total == convTotal {
+				result, err := json.Marshal(table)
+
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+
+				w.Write(result)
+				return
+			}
+		}
+
+		http.Error(w, `{"status":"table not found"}`, http.StatusNotFound)
+		return
 	}
 
 	http.Error(w, "", http.StatusBadRequest)
