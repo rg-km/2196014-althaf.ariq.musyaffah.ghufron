@@ -17,5 +17,17 @@ type FileData struct {
 }
 
 func ReadFile(name string) (FileData, error) {
-	return FileData{}, nil // TODO: replace this
+	// nama text file yang ingin dibaca
+	fileName := name
+
+	//membaca text file
+	data, err := ioutil.ReadFile(fileName)
+	if err != nil {
+		return FileData{}, err
+	}
+	return FileData{
+		Name: fileName,
+		Size: len(data),
+		Data: data,
+	}, nil
 }
