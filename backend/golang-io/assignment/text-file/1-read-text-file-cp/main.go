@@ -6,7 +6,12 @@ import (
 )
 
 func main() {
-	fmt.Println("dummyCommit")
+	res, _ := ReadFile("./read.txt")
+	fmt.Printf("File Name: %s", res.Name)
+	fmt.Printf("\nSize: %d bytes", res.Size)
+	fmt.Printf("\nData: %s\n", res.Data)
+
+	//fmt.Println("dummyCommit")
 }
 
 // Gunakan struct untuk menyimpan data file nya ya

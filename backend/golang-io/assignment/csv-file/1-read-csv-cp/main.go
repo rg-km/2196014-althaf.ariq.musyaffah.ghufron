@@ -7,7 +7,18 @@ import (
 )
 
 func main() {
+	fileName := "questions.csv"
+	data := make(map[string]string)
+
+	data, err := CSVToMap(data, fileName)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	fmt.Println(data)
 	fmt.Print("dummy commit")
+
 }
 
 func CSVToMap(data map[string]string, fileName string) (map[string]string, error) {

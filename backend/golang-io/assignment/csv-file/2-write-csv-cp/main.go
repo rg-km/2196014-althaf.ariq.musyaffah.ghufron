@@ -33,3 +33,16 @@ func WriteToCSV(fileName string, records []Menu) error {
 
 	return nil
 }
+
+func main() {
+	csvFileName := "menu.csv"
+	data := []Menu{
+		{"Pizza", 100},
+		{"Burger", 200},
+		{"Coffee", 300},
+		{"Tea", 400},
+		{"Sandwich", 500},
+	}
+
+	_ = WriteToCSV(csvFileName, data)
+}
