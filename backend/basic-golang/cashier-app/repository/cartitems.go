@@ -65,22 +65,64 @@ func (u *CartItemRepository) Save(cartItems []CartItem) error {
 }
 
 func (u *CartItemRepository) SelectAll() ([]CartItem, error) {
-	return []CartItem{}, nil // TODO: replace this
+	carItems, err := u.LoadOrCreate()
+	if err != nil {
+		return nil, err
+	}
+
+	return carItems, nil
 }
 
 func (u *CartItemRepository) Add(product Product) error {
-	// cartItems, err := u.LoadOrCreate()
-	// if err != nil {
-	// 	return err
-	// }
+	cartItems, err := u.LoadOrCreate()
+	if err != nil {
+		return err
+	}
 
-	return nil // TODO: replace this
+	//update -> looping cartItems and find product
+	for i := 0; i < len(cartItems); i++ {
+		if cartItems[i].ProductName == product.ProductName {
+			cartItems[i].Quantity++
+			return u.Save(cartItems)
+		}
+	}
+
+	//insert -> new product
+	cartItems = append(cartItems, CartItem{
+		Category:    product.Category,
+		ProductName: product.ProductName,
+		Price:       product.Price,
+		Quantity:    1,
+	})
+
+	return u.Save(cartItems)
 }
 
 func (u *CartItemRepository) ResetCartItems() error {
-	return nil // TODO: replace this
+	u.db.Delete("cart_items")
+
+	nameColumn := [][]string{
+		{"category", "product_name", "price", "quantity"},
+	}
+
+	err := u.db.Save("cart_items", nameColumn)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (u *CartItemRepository) TotalPrice() (int, error) {
-	return 0, nil // TODO: replace this
+	cartItems, err := u.LoadOrCreate()
+	if err != nil {
+		return 0, err
+	}
+
+	totalPrice := 0
+	for i := 0; i < len(cartItems); i++ {
+		totalPrice += cartItems[i].Price * cartItems[i].Quantity
+	}
+
+	return totalPrice, nil
 }
