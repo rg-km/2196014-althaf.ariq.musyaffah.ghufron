@@ -1,7 +1,5 @@
 package repository
 
-import "fmt"
-
 type TransactionRepository struct {
 	cartItemRepository CartItemRepository
 }
@@ -16,9 +14,10 @@ func (u *TransactionRepository) Pay(amount int) (int, error) {
 		return 0, err
 	}
 
-	if totalPrize > amount {
-		return 0, fmt.Errorf("insufficient amount")
-	}
+	// not required
+	// if totalPrize > amount {
+	// 	return 0, fmt.Errorf("insufficient amount")
+	// }
 
 	return amount - totalPrize, nil
 }
