@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -14,30 +15,37 @@ type AuthErrorResponse struct {
 }
 
 func (api *API) login(w http.ResponseWriter, req *http.Request) {
+	username := req.URL.Query().Get("username")
+	password := req.URL.Query().Get("password")
+	res, err := api.usersRepo.Login(username, password)
+
+	w.Header().Set("Content-Type", "application/json")
 	encoder := json.NewEncoder(w)
-
-	LoginRequest := struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
-	}{}
-
-	err := json.NewDecoder(req.Body).Decode(&LoginRequest)
 	if err != nil {
-		encoder.Encode(AuthErrorResponse{Error: "Invalid request"})
+		w.WriteHeader(http.StatusUnauthorized)
+		encoder.Encode(AuthErrorResponse{Error: err.Error()})
 		return
 	}
 
-	if LoginRequest.Username == "admin" && LoginRequest.Password == "admin" {
-		encoder.Encode(LoginSuccessResponse{Username: LoginRequest.Username})
-		return
-	}
+	fmt.Println(res)
 
-	encoder.Encode(AuthErrorResponse{Error: "Invalid credentials"})
+	//return logeed in user
+	encoder.Encode(LoginSuccessResponse{Username: username}) //done
 
+	//json.NewEncoder(w).Encode(LoginSuccessResponse{Username: ""}) // TODO: replace this
 }
 
 func (api *API) logout(w http.ResponseWriter, req *http.Request) {
-	encoder := json.NewEncoder(w)
-	encoder.Encode(AuthErrorResponse{Error: ""}) // TODO: replace this
+	username := req.URL.Query().Get("username")
+	err := api.usersRepo.Logout(username)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		encoder := json.NewEncoder(w)
+		encoder.Encode(AuthErrorResponse{Error: err.Error()})
+		return
+	}
 
+	w.WriteHeader(http.StatusOK) //done
+
+	//encoder.Encode(AuthErrorResponse{Error: ""}) // TODO: replace this
 }
