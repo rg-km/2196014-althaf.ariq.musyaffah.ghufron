@@ -105,12 +105,12 @@ func (u *CartItemRepository) ResetCartItems() error {
 		{"category", "product_name", "price", "quantity"},
 	}
 
-	err := u.db.Save("cart_items", nameColumn)
-	if err != nil {
-		return err
-	}
+	// err := u.db.Save("cart_items", nameColumn)
+	// if err != nil {
+	// 	return err
+	// }
 
-	return nil
+	return u.db.Save("cart_items", nameColumn)
 }
 
 func (u *CartItemRepository) TotalPrice() (int, error) {

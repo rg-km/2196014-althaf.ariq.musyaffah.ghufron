@@ -49,11 +49,13 @@ func (u *UserRepository) SelectAll() ([]User, error) {
 		return nil, err
 	}
 
-	return users, nil // TODO: replace this
+	return users, nil
 }
 
 func (u UserRepository) Login(username string, password string) (*string, error) {
-	u.LogoutAll()
+	if err := u.LogoutAll(); err != nil {
+		return nil, err
+	}
 
 	users, err := u.SelectAll()
 	if err != nil {
@@ -67,7 +69,7 @@ func (u UserRepository) Login(username string, password string) (*string, error)
 			return &username, nil
 		}
 	}
-	return nil, fmt.Errorf("Login Failed") // TODO: replace this
+	return nil, fmt.Errorf("Login Failed")
 }
 
 func (u *UserRepository) FindLoggedinUser() (*string, error) {
@@ -76,13 +78,13 @@ func (u *UserRepository) FindLoggedinUser() (*string, error) {
 		return nil, err
 	}
 
-	//loop through users and return username if logged in
+	//loop through users and return username if loggedin true
 	for i := 0; i < len(users); i++ {
 		if users[i].Loggedin {
 			return &users[i].Username, nil
 		}
 	}
-	return nil, fmt.Errorf("no user is logged in") // TODO: replace this
+	return nil, fmt.Errorf("no user is logged in")
 }
 
 func (u *UserRepository) Logout(username string) error {
@@ -91,17 +93,18 @@ func (u *UserRepository) Logout(username string) error {
 		return err
 	}
 	//if username is logged in, call changeStatus to false
-	err = u.changeStatus(*records, false)
-	if err != nil {
-		return err
-	}
+	return u.changeStatus(*records, false)
+	// err = u.changeStatus(*records, false)
+	// if err != nil {
+	// 	return err
+	// }
 
-	return nil // TODO: replace this
+	// return nil
 }
 
 func (u *UserRepository) Save(users []User) error {
 	records := [][]string{
-		{"username", "password"},
+		{"username", "password", "loggedin"},
 	}
 
 	for i := 0; i < len(users); i++ {
@@ -120,7 +123,6 @@ func (u *UserRepository) changeStatus(username string, status bool) error {
 		return err
 	}
 
-	//update
 	//change status Loggedin to false
 	for i := 0; i < len(users); i++ {
 		if users[i].Username == username {
@@ -129,7 +131,7 @@ func (u *UserRepository) changeStatus(username string, status bool) error {
 		}
 	}
 
-	return nil // TODO: replace this
+	return fmt.Errorf("user not found") // TODO: replace this
 }
 
 func (u *UserRepository) LogoutAll() error {
@@ -140,10 +142,7 @@ func (u *UserRepository) LogoutAll() error {
 
 	//loop through users
 	for i := 0; i < len(users); i++ {
-		err := u.Logout(users[i].Username)
-		if err != nil {
-			return err
-		}
+		u.Logout(users[i].Username)
 	}
 
 	return nil // TODO: replace this

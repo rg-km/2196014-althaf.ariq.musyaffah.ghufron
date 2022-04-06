@@ -17,7 +17,7 @@ func NewProductRepository(db db.DB) ProductRepository {
 func (u *ProductRepository) LoadOrCreate() ([]Product, error) {
 	records, err := u.db.Load("products")
 	if err != nil {
-		return nil, err
+		return []Product{}, err
 	}
 
 	result := make([]Product, 0)
@@ -37,10 +37,10 @@ func (u *ProductRepository) LoadOrCreate() ([]Product, error) {
 }
 
 func (u *ProductRepository) SelectAll() ([]Product, error) {
-	records, err := u.LoadOrCreate()
+	products, err := u.LoadOrCreate()
 	if err != nil {
 		return nil, err
 	}
 
-	return records, nil
+	return products, nil
 }
