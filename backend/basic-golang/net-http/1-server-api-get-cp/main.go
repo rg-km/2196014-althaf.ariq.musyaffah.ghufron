@@ -24,29 +24,34 @@ func TableHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "GET" {
 
-		// TODO: answer here
+		total := r.FormValue("total")
 
-		total := r.Form["total"]
+		if total != "" {
+			totalInt, err := strconv.Atoi(total)
 
-		convTotal, err := strconv.Atoi(total[0])
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		for _, table := range data {
-
-			if table.Total == convTotal {
-				result, err := json.Marshal(table)
-
-				if err != nil {
-					http.Error(w, err.Error(), http.StatusInternalServerError)
-					return
-				}
-
-				w.Write(result)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
+
+			result := []Table{}
+
+			for _, table := range data {
+				if table.Total == totalInt {
+					result = append(result, table)
+				}
+			}
+			resultJSON, err := json.Marshal(result)
+
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+
+			// untuk mendaftarkan result sebagai response
+			w.Write(resultJSON)
+			return
+
 		}
 
 		http.Error(w, `{"status":"table not found"}`, http.StatusNotFound)
