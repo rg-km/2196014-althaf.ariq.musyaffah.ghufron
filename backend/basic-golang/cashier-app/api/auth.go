@@ -30,9 +30,8 @@ func (api *API) login(w http.ResponseWriter, req *http.Request) {
 	fmt.Println(res)
 
 	//return logeed in user
-	encoder.Encode(LoginSuccessResponse{Username: username}) //done
 
-	//json.NewEncoder(w).Encode(LoginSuccessResponse{Username: ""}) // TODO: replace this
+	json.NewEncoder(w).Encode(LoginSuccessResponse{Username: *res}) //done
 }
 
 func (api *API) logout(w http.ResponseWriter, req *http.Request) {
