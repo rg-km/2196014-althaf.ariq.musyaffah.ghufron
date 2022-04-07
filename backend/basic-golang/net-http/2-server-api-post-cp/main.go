@@ -86,8 +86,8 @@ func TablesHandler(w http.ResponseWriter, r *http.Request) {
 
 		// set header response code with status created/201
 		w.Write(result)
-		w.WriteHeader(http.StatusCreated)
 		// write json reponse body
+		w.WriteHeader(http.StatusCreated)
 		w.Write([]byte(`{"status":"add tables succeed"}`))
 		return
 	}

@@ -27,17 +27,12 @@ func TableHandler(w http.ResponseWriter, r *http.Request) {
 		total := r.FormValue("total")
 
 		if total != "" {
-			totalInt, err := strconv.Atoi(total)
-
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
 
 			result := []Table{}
 
 			for _, table := range data {
-				if table.Total == totalInt {
+				totalStr := strconv.Itoa(table.Total)
+				if totalStr == total {
 					result = append(result, table)
 				}
 			}
@@ -47,17 +42,14 @@ func TableHandler(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-
 			// untuk mendaftarkan result sebagai response
+			fmt.Println(string(resultJSON))
 			w.Write(resultJSON)
 			return
-
 		}
-
 		http.Error(w, `{"status":"table not found"}`, http.StatusNotFound)
 		return
 	}
-
 	http.Error(w, "", http.StatusBadRequest)
 }
 
