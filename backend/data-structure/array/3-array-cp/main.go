@@ -27,10 +27,20 @@ func MostWordsFound(sentences []string) int {
 	for _, sentence := range sentences {
 		max := CountWords(sentence)
 		// TODO: answer here
+		if max > ans {
+			ans = max
+		}
+
 	}
 	return ans
 }
 
 func CountWords(sentence string) int {
-	return 0 // TODO: replace this
+	var count int
+	for _, char := range sentence {
+		if char == ' ' {
+			count++
+		}
+	}
+	return count + 1
 }
