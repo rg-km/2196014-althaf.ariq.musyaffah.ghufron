@@ -56,19 +56,19 @@ func TablesHandler(w http.ResponseWriter, r *http.Request) {
 	// logic handle POST request
 	if r.Method == "POST" {
 		// TODO: answer here
-		// 1. baca request body dari client
-		// 2. decode request body ke dalam format JSON
-		// 3. tambahkan data ke dalam data
-		// 4. encode data ke dalam format string JSON
-		// 5. mendaftarkan response `result`
-		// 6. return
+		if r.Body == nil {
+			http.Error(w, "Please send a request body", http.StatusBadRequest)
+			return
+		}
 
+		// baca request body
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
+		// decode request body ke dalam format JSON
 		var tables []Table
 		err = json.Unmarshal(body, &tables)
 		if err != nil {
@@ -76,18 +76,9 @@ func TablesHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		data = append(data, tables...)
-
-		result, err := json.Marshal(data)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
 		// set header response code with status created/201
-		w.Write(result)
-		// write json reponse body
 		w.WriteHeader(http.StatusCreated)
+		// write json reponse body
 		w.Write([]byte(`{"status":"add tables succeed"}`))
 		return
 	}

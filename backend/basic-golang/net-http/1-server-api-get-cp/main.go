@@ -23,31 +23,35 @@ func TableHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	if r.Method == "GET" {
+		tables := []Table{}
+		sumTotal := r.FormValue("total")
 
-		total := r.FormValue("total")
-
-		if total != "" {
-
-			result := []Table{}
-
-			for _, table := range data {
-				totalStr := strconv.Itoa(table.Total)
-				if totalStr == total {
-					result = append(result, table)
-				}
-			}
-			resultJSON, err := json.Marshal(result)
-
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			// untuk mendaftarkan result sebagai response
-			fmt.Println(string(resultJSON))
-			w.Write(resultJSON)
+		if sumTotal == "" {
+			http.Error(w, "invalid total", http.StatusBadRequest)
 			return
 		}
-		http.Error(w, `{"status":"table not found"}`, http.StatusNotFound)
+
+		total, err := strconv.ParseInt(sumTotal, 16, 32)
+		if err != nil {
+			http.Error(w, "invalid total", http.StatusBadRequest)
+		}
+
+		for _, table := range data {
+			if int64(table.Total) == total {
+				tables = append(tables, table)
+			}
+		}
+		result, err := json.Marshal(tables)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+		if len(tables) == 0 {
+			http.Error(w, `{"status":"table not found"}`, http.StatusNotFound)
+			return
+		}
+
+		w.Write(result)
 		return
 	}
 	http.Error(w, "", http.StatusBadRequest)
