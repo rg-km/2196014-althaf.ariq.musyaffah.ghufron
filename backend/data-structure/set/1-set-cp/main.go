@@ -22,9 +22,32 @@ func main() {
 }
 
 func Intersection(str1, str2 []string) (inter []string) {
-	return []string{} // TODO: replace this
+	set := make(map[string]bool) //declaring set
+
+	for _, item := range str1 {
+		set[item] = true // isi set dengan elemen dari str1 = true
+	}
+
+	for _, item := range str2 { //checking if item in str2 is in set
+		if _, ok := set[item]; ok {
+			inter = append(inter, item)
+		}
+	}
+
+	inter = RemoveDuplicates(inter) //remove duplicates
+	return
 }
 
 func RemoveDuplicates(elements []string) (nodups []string) {
-	return []string{} // TODO: replace this
+	set := map[string]bool{}
+
+	for _, item := range elements {
+		if !set[item] {
+			// set item true
+			set[item] = true
+			// Append to nodups slice.
+			nodups = append(nodups, item)
+		}
+	}
+	return
 }
