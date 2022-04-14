@@ -65,5 +65,18 @@ func (node ListNode) MiddleNode(head *ListNode) *ListNode {
 		l++
 	}
 	// TODO: answer here
-	return head
+	//if there is one middle node, return the middle node
+	if l%2 == 0 {
+		tmp = head
+		for i := 0; i < l/2; i++ {
+			tmp = tmp.Next
+		}
+		return tmp
+	}
+	//if there is two middle node, return the second middle node
+	tmp = head
+	for i := 0; i < l/2; i++ {
+		tmp = tmp.Next
+	}
+	return tmp
 }
