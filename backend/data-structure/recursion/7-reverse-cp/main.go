@@ -5,8 +5,14 @@ package main
 import "fmt"
 
 func Reverse(st []string, depth int) string {
-	str := ""
+	str := "" //inisiasi string kosong
 	// TODO: answer here
+	//loop untuk mengambil nilai dari array
+	for i := depth; i >= 0; i-- {
+		str += st[i] // menggabungkan nilai array
+		//fmt.Println(st[i])
+	}
+
 	return str
 }
 

@@ -34,11 +34,13 @@ func FibonacciRecursion(i int) int {
 	}
 
 	// TODO: answer here
+	// if i more than 1, then return i + fib(i-1)
+	return FibonacciRecursion(i-1) + FibonacciRecursion(i-2)
 }
 
 func main() {
 	var i int
-	for i = 0; i < 10; i++ {
+	for i = 0; i <= 10; i++ {
 		fmt.Printf(" %d  ", FibonacciRecursion(i))
 	}
 }
