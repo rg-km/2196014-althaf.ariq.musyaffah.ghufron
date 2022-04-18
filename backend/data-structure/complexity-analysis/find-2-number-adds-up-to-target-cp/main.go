@@ -28,11 +28,17 @@ func main() {
 }
 
 func TwoTargetSums(nums []int, target int) []int {
-	numberMap := make(map[int]int)
-	output := make([]int, 2)
+	numberMap := make(map[int]int) // key: number, value: index
+	output := make([]int, 2)       // index of the two numbers
 	for i := 0; i < len(nums); i++ {
-		val, ok := numberMap[target-nums[i]]
+		val, ok := numberMap[target-nums[i]] // check if target-nums[i] is in the map
 		// TODO: answer here
+		if ok { // if target - nums[i] in map
+			output[0] = val
+			output[1] = i
+			return output
+		}
+		numberMap[nums[i]] = i // else, add nums[i] to map
 	}
 	return output
 }
