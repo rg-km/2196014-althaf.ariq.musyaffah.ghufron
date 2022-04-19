@@ -10,12 +10,12 @@ func main() {
 			payment: 2000, price 5000 -> result -1
 			payment: 100000, price 100000 -> result 5000
 	*/
-	res := CalculateChange(5000, 1000)
-	fmt.Println(res)
+	// res := CalculateChange(100000, 100000)
+	// fmt.Println(res)
 
 	// Try correct answer:
-	// resCorrect := CalculateChangeCorrect(arr)
-	// fmt.Println(resCorrect)
+	resCorrect := CalculateChangeCorrect(98000, 100000)
+	fmt.Println(resCorrect)
 }
 
 func CalculateChange(totalPayment, totalPrice float64) float64 {
@@ -36,5 +36,23 @@ func CalculateChange(totalPayment, totalPrice float64) float64 {
 }
 
 func CalculateChangeCorrect(totalPayment, totalPrice float64) float64 {
-	return 0 // TODO: replace this
+	if totalPayment < totalPrice && totalPrice < 100000 {
+		return -1
+	}
+
+	minimumPriceForDiscount := float64(100000)
+	if totalPrice >= minimumPriceForDiscount {
+		// Give 5% Discount rate
+		discountRate := 0.05
+		totalPrice = totalPrice - (totalPrice * discountRate)
+
+		if totalPayment < totalPrice {
+			return -1
+		}
+
+		return totalPayment - totalPrice
+	}
+
+	change := totalPayment - totalPrice
+	return change
 }
