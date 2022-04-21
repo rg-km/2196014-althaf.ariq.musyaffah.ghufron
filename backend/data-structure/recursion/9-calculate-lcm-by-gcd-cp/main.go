@@ -38,6 +38,7 @@ func LCM(a, b int, integers ...int) int {
 	// if there are more integers, find LCM of all integers
 	for i := 0; i < len(integers); i++ {
 		// TODO: answer here
+		result = result * integers[i] / GCD(result, integers[i]) // menghitung LCM dari semua angka
 	}
 
 	return result
