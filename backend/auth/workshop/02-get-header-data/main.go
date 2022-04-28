@@ -26,10 +26,11 @@ func Routes() *http.ServeMux {
 		// TODO: replace this
 		cookie, err := r.Cookie(cookieFieldName)
 		if err != nil {
-			w.WriteHeader(http.StatusUnauthorized)
-			return
-		}
-		if cookie.Value == "" {
+			if err == http.ErrNoCookie {
+				w.WriteHeader(http.StatusUnauthorized)
+				return
+			}
+
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
