@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
@@ -27,20 +26,31 @@ func (api *API) AllowOrigin(w http.ResponseWriter, req *http.Request) {
 func (api *API) AuthMiddleWare(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		api.AllowOrigin(w, r)
-		encoder := json.NewEncoder(w)
+		//encoder := json.NewEncoder(w)
 		// Task: 1. Ambil token dari cookie yang dikirim ketika request
 		//       2. return unauthorized ketika token kosong
 		//       3. return bad request ketika field token tidak ada
 
 		// TODO: answer here
+		c, err := r.Cookie("token")
+		if err != nil {
+			if err == http.ErrNoCookie {
+				w.WriteHeader(http.StatusUnauthorized)
+				return
+			}
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
 
 		// Task: Ambil value dari cookie token
 
 		// TODO: answer here
+		tknStr := c.Value
 
 		// Task: Deklarasi variable claim
 
 		// TODO: answer here
+		claims := &Claims{}
 
 		// Task: 1. parse JWT token ke dalam claim
 		//       2. return unauthorized ketika signature invalid
@@ -48,9 +58,31 @@ func (api *API) AuthMiddleWare(next http.Handler) http.Handler {
 		//       4. return unauthorized ketika token sudah tidak valid (biasanya karna token expired)
 
 		// TODO: answer here
+		tkn, err := jwt.ParseWithClaims(tknStr, claims, func(token *jwt.Token) (interface{}, error) {
+			return jwtKey, nil
+		})
+		if err != nil {
+			if err == jwt.ErrSignatureInvalid {
+				w.WriteHeader(http.StatusUnauthorized)
+				return
+			}
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		// Task: return unauthorized ketika token sudah tidak valid (biasanya karna token expired)
+		if !tkn.Valid {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
 
 		// Task: Validasi
+		//       1. validasi role
+		//       2. return unauthorized ketika role tidak sesuai
 
-		return next.ServeHTTP(w, r) // TODO: replace this
+		ctx := context.WithValue(r.Context(), "props", claims)
+		next.ServeHTTP(w, r.WithContext(ctx))
+
+		//return next.ServeHTTP(w, r) // TODO: replace this
 	})
 }
