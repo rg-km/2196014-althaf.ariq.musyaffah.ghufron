@@ -29,7 +29,6 @@ func Routes() *http.ServeMux {
 		// TODO: answer here
 		err := json.NewDecoder(r.Body).Decode(&creds)
 		if err != nil {
-			// return bad request ketika terjadi kesalahan decoding json
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
@@ -42,9 +41,8 @@ func Routes() *http.ServeMux {
 		// Task: return unauthorized jika password salah
 
 		// TODO: answer here
-		if !ok || expectedPassword.Password != creds.Password {
+		if !ok || creds.Password != expectedPassword {
 			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte("user credential invalid"))
 			return
 		}
 
