@@ -2,7 +2,9 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -45,25 +47,46 @@ func (api *API) login(w http.ResponseWriter, req *http.Request) {
 	//       3. expiry time menggunakan time millisecond
 
 	// TODO: answer here
+	expirationTime := time.Now().Add(5 * time.Minute)
+
+	claims := &Claims{
+		Username: username,
+		StandardClaims: jwt.StandardClaims{
+			// expiry time menggunakan time millisecond
+			ExpiresAt: expirationTime.Unix(),
+		},
+	}
 
 	// Task: Buat token menggunakan encoded claim dengan salah satu algoritma yang dipakai
 
 	// TODO: answer here
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	// Task: 1. Buat jwt string dari token yang sudah dibuat menggunakan JWT key yang telah dideklarasikan
 	//       2. return internal error ketika ada kesalahan ketika pembuatan JWT string
 
 	// TODO: answer here
+	tokenString, err := token.SignedString(jwtKey)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		//encoder.Encode(AuthErrorResponse{Error: err.Error()})
+		return
+	}
 
 	// Task: Set token string kedalam cookie response
 
 	// TODO: answer here
+	http.SetCookie(w, &http.Cookie{
+		Name:    "token",
+		Value:   tokenString,
+		Expires: expirationTime,
+	})
 
 	// Task: Return response berupa username dan token JWT yang sudah login
 
 	//return logeed in user
-
-	json.NewEncoder(w).Encode(LoginSuccessResponse{Username: *res}) //done
+	fmt.Println(res)
+	json.NewEncoder(w).Encode(LoginSuccessResponse{Username: username, Token: tokenString}) //done
 }
 
 func (api *API) logout(w http.ResponseWriter, req *http.Request) {
@@ -79,5 +102,5 @@ func (api *API) logout(w http.ResponseWriter, req *http.Request) {
 
 	w.WriteHeader(http.StatusOK) //done
 
-	//encoder.Encode(AuthErrorResponse{Error: ""}) // TODO: replace this
+	//encoder.Encode(AuthErrorResponse{Error: err}) // TODO: replace this
 }
