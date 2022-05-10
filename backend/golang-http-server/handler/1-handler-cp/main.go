@@ -10,5 +10,11 @@ import (
 // Hint, gunakan time.Weekday, time.Day, time.Month, dan time.Year
 
 func GetHandler() http.HandlerFunc {
-	return func(writer http.ResponseWriter, request *http.Request) {} // TODO: replace this
+	var handler http.HandlerFunc = func(w http.ResponseWriter, r *http.Request) {
+		time := time.Now()
+		outputTime := fmt.Sprintf("%v, %v %v %v", time.Weekday(), time.Day(), time.Month(), time.Year())
+		fmt.Fprint(w, outputTime)
+
+	}
+	return handler
 }
