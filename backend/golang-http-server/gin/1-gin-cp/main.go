@@ -1,8 +1,6 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,7 +9,18 @@ import (
 // Buatlah route "/hello" yang menampilkan JSON {"message": "hello"} dan "/world" yang menampilkan JSON {"message": "world"}
 
 func GetGinRoute() *gin.Engine {
-	return &gin.Engine{} // TODO: replace this
+	r := gin.Default()
+	r.GET("/hello", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "hello",
+		})
+	})
+	r.GET("/world", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "world",
+		})
+	})
+	return r
 }
 
 func main() {
