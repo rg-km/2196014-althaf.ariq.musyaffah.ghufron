@@ -19,7 +19,11 @@ var quotes = []string{
 }
 
 // TODO: answer here
+type QuotesHandler struct{}
 
 func (qh QuotesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// TODO: answer here
+	index := rand.Intn(len(quotes))
+	quote := quotes[index]
+	w.Write([]byte(fmt.Sprintf(quote)))
 }
