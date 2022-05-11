@@ -73,6 +73,7 @@ func (api *API) clearCart(w http.ResponseWriter, req *http.Request) {
 	defer func() {
 		if err != nil {
 			// TODO: answer here
+			w.WriteHeader(http.StatusBadRequest)
 			encoder.Encode(CartErrorResponse{Error: err.Error()})
 		}
 	}()
@@ -93,7 +94,7 @@ func (api *API) cartList(w http.ResponseWriter, req *http.Request) {
 
 	fmt.Println(cartItems)
 
-	encoder.Encode(CartListSuccessResponse{CartItems: []repository.CartItem{}}) // TODO: replace this
+	encoder.Encode(CartListSuccessResponse{CartItems: cartItems}) // TODO: replace this
 }
 
 func (api *API) pay(w http.ResponseWriter, req *http.Request) {
@@ -110,6 +111,6 @@ func (api *API) pay(w http.ResponseWriter, req *http.Request) {
 
 	err = api.salesRepo.Add(cartItems)
 
-	encoder.Encode(CartListSuccessResponse{CartItems: []repository.CartItem{}}) // TODO: replace this
+	encoder.Encode(CartListSuccessResponse{CartItems: cartItems}) // TODO: replace this
 
 }

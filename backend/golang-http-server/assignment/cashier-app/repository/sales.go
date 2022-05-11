@@ -52,6 +52,16 @@ func (u *SalesRepository) LoadOrCreate() ([]Sales, error) {
 		}
 
 		// TODO: answer here
+		sales := Sales{
+			Date:        date,
+			Category:    category,
+			ProductName: product,
+			Quantity:    quantity,
+			Price:       price,
+			Total:       total,
+		}
+
+		result = append(result, sales)
 	}
 
 	return result, nil
@@ -63,6 +73,14 @@ func (u *SalesRepository) Save(sales []Sales) error {
 	}
 	for i := 0; i < len(sales); i++ {
 		// TODO: answer here
+		records = append(records, []string{
+			sales[i].Date.String(),
+			sales[i].Category,
+			sales[i].ProductName,
+			strconv.Itoa(sales[i].Quantity),
+			strconv.Itoa(sales[i].Price),
+			strconv.Itoa(sales[i].Total),
+		})
 	}
 	return u.db.Save("sales", records)
 }
@@ -75,6 +93,15 @@ func (u *SalesRepository) Add(cartItems []CartItem) error {
 
 	for _, item := range cartItems {
 		// TODO: answer here
+		newSales := Sales{
+			Date:        time.Now(),
+			Category:    item.Category,
+			ProductName: item.ProductName,
+			Quantity:    item.Quantity,
+			Price:       item.Price,
+			Total:       item.Quantity * item.Price,
+		}
+		sales = append(sales, newSales)
 	}
 
 	return u.Save(sales)
@@ -95,20 +122,33 @@ func (u *SalesRepository) Get(request GetSalesRequest) ([]Sales, error) {
 	}
 
 	if request.StartPeriod != nil && request.EndPeriod != nil && request.ProductName == "" {
-		return []Sales{}, nil // TODO: replace this
+		return GetTimePeriodSales(sales, request.StartPeriod, request.EndPeriod), nil
 	}
 
 	if request.StartPeriod == nil && request.EndPeriod == nil && request.ProductName != "" {
-		return []Sales{}, nil // TODO: replace this
+		return GetProductNameSales(sales, request.ProductName), nil
 	}
 
-	return []Sales{}, nil // TODO: replace this
+	return GetProductNameTimePeriodSales(sales, request.ProductName, request.StartPeriod, request.EndPeriod), nil
 }
 
 func GetProductNameSales(sales []Sales, productName string) []Sales {
 	var productSales []Sales
 	for _, product := range sales {
 		// TODO: answer here
+		if product.ProductName == productName {
+			newProduct := Sales{
+				Date:        product.Date,
+				Category:    product.Category,
+				ProductName: product.ProductName,
+				Quantity:    product.Quantity,
+				Price:       product.Price,
+				Total:       product.Total,
+			}
+
+			productSales = append(productSales, newProduct)
+		}
+
 	}
 
 	return productSales
@@ -120,6 +160,19 @@ func GetTimePeriodSales(sales []Sales, startPeriod *time.Time, endPeriod *time.T
 	log.Println(endOfDay, startPeriod)
 	for _, product := range sales {
 		// TODO: answer here
+		if product.Date.After(*startPeriod) && product.Date.Before(endOfDay) {
+			newProduct := Sales{
+				Date:        product.Date,
+				Category:    product.Category,
+				ProductName: product.ProductName,
+				Quantity:    product.Quantity,
+				Price:       product.Price,
+				Total:       product.Total,
+			}
+
+			productSales = append(productSales, newProduct)
+		}
+
 	}
 	return productSales
 }
@@ -129,6 +182,18 @@ func GetProductNameTimePeriodSales(sales []Sales, productName string, startPerio
 	endOfDay := time.Date(endPeriod.Year(), endPeriod.Month(), endPeriod.Day(), 23, 59, 59, 0, time.UTC)
 	for _, product := range sales {
 		// TODO: answer here
+		if product.ProductName == productName && product.Date.After(*startPeriod) && product.Date.Before(endOfDay) {
+			newProduct := Sales{
+				Date:        product.Date,
+				Category:    product.Category,
+				ProductName: product.ProductName,
+				Quantity:    product.Quantity,
+				Price:       product.Price,
+				Total:       product.Total,
+			}
+
+			productSales = append(productSales, newProduct)
+		}
 	}
 	return productSales
 }
