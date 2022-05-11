@@ -29,10 +29,14 @@ func (h *URLHandler) Get(c *gin.Context) {
 		})
 		return
 	}
-	c.Writer.Header().Set("Location", url.LongURL)
-	c.JSON(http.StatusFound, gin.H{
-		"message": "Redirect",
-	})
+
+	//should use gin redirect
+	c.Redirect(http.StatusFound, url.LongURL)
+
+	// c.Writer.Header().Set("Location", url.LongURL)
+	// c.JSON(http.StatusFound, gin.H{
+	// 	"message": "Redirect",
+	// })
 
 }
 
@@ -46,7 +50,7 @@ func (h *URLHandler) Create(c *gin.Context) {
 
 	urlResponse, err := h.repo.Create(url.LongURL)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 
@@ -66,7 +70,7 @@ func (h *URLHandler) CreateCustom(c *gin.Context) {
 
 	urlResponse, err := h.repo.CreateCustom(url.LongURL, url.ShortURL)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 	}
