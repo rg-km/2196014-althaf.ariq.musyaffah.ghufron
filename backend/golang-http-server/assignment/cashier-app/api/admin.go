@@ -34,33 +34,45 @@ func (api *API) getDashboard(w http.ResponseWriter, req *http.Request) {
 
 	// TODO: answer here
 
-	var getSalesRequest repository.GetSalesRequest
-
-	if req.URL.Query().Get("start_period") != "" && req.URL.Query().Get("end_period") == "" {
-		getSalesRequest = repository.GetSalesRequest{
-			StartPeriod: &startPeriod,
-			EndPeriod:   nil,
-			ProductName: productName,
-		}
-	} else if req.URL.Query().Get("end_period") != "" && req.URL.Query().Get("start_period") == "" {
-		getSalesRequest = repository.GetSalesRequest{
-			StartPeriod: nil,
-			EndPeriod:   &endPeriod,
-			ProductName: productName,
-		}
-	} else if req.URL.Query().Get("start_period") == "" && req.URL.Query().Get("end_period") == "" {
-		getSalesRequest = repository.GetSalesRequest{
-			StartPeriod: nil,
-			EndPeriod:   nil,
-			ProductName: productName,
-		}
-	} else {
-		getSalesRequest = repository.GetSalesRequest{
-			StartPeriod: &startPeriod,
-			EndPeriod:   &endPeriod,
-			ProductName: productName,
-		}
+	getSalesRequest := repository.GetSalesRequest{
+		ProductName: productName,
+		StartPeriod: &startPeriod,
+		EndPeriod:   &endPeriod,
 	}
+
+	if req.URL.Query().Get("start_period") == "" {
+		getSalesRequest.StartPeriod = nil
+	}
+	if req.URL.Query().Get("end_period") == "" {
+		getSalesRequest.EndPeriod = nil
+	}
+	// var getSalesRequest repository.GetSalesRequest
+
+	// if req.URL.Query().Get("start_period") != "" && req.URL.Query().Get("end_period") == "" {
+	// 	getSalesRequest = repository.GetSalesRequest{
+	// 		StartPeriod: &startPeriod,
+	// 		EndPeriod:   nil,
+	// 		ProductName: productName,
+	// 	}
+	// } else if req.URL.Query().Get("end_period") != "" && req.URL.Query().Get("start_period") == "" {
+	// 	getSalesRequest = repository.GetSalesRequest{
+	// 		StartPeriod: nil,
+	// 		EndPeriod:   &endPeriod,
+	// 		ProductName: productName,
+	// 	}
+	// } else if req.URL.Query().Get("start_period") == "" && req.URL.Query().Get("end_period") == "" {
+	// 	getSalesRequest = repository.GetSalesRequest{
+	// 		StartPeriod: nil,
+	// 		EndPeriod:   nil,
+	// 		ProductName: productName,
+	// 	}
+	// } else {
+	// 	getSalesRequest = repository.GetSalesRequest{
+	// 		StartPeriod: &startPeriod,
+	// 		EndPeriod:   &endPeriod,
+	// 		ProductName: productName,
+	// 	}
+	// }
 
 	encoder := json.NewEncoder(w)
 

@@ -79,7 +79,7 @@ func (u *SalesRepository) Save(sales []Sales) error {
 			sales[i].ProductName,
 			strconv.Itoa(sales[i].Quantity),
 			strconv.Itoa(sales[i].Price),
-			strconv.Itoa(sales[i].Total),
+			strconv.Itoa(sales[i].Price * sales[i].Quantity),
 		})
 	}
 	return u.db.Save("sales", records)
@@ -137,16 +137,16 @@ func GetProductNameSales(sales []Sales, productName string) []Sales {
 	for _, product := range sales {
 		// TODO: answer here
 		if product.ProductName == productName {
-			newProduct := Sales{
-				Date:        product.Date,
-				Category:    product.Category,
-				ProductName: product.ProductName,
-				Quantity:    product.Quantity,
-				Price:       product.Price,
-				Total:       product.Total,
-			}
+			// newProduct := Sales{
+			// 	Date:        product.Date,
+			// 	Category:    product.Category,
+			// 	ProductName: product.ProductName,
+			// 	Quantity:    product.Quantity,
+			// 	Price:       product.Price,
+			// 	Total:       product.Total,
+			// }
 
-			productSales = append(productSales, newProduct)
+			productSales = append(productSales, product)
 		}
 
 	}
@@ -161,16 +161,16 @@ func GetTimePeriodSales(sales []Sales, startPeriod *time.Time, endPeriod *time.T
 	for _, product := range sales {
 		// TODO: answer here
 		if product.Date.After(*startPeriod) && product.Date.Before(endOfDay) {
-			newProduct := Sales{
-				Date:        product.Date,
-				Category:    product.Category,
-				ProductName: product.ProductName,
-				Quantity:    product.Quantity,
-				Price:       product.Price,
-				Total:       product.Total,
-			}
+			// newProduct := Sales{
+			// 	Date:        product.Date,
+			// 	Category:    product.Category,
+			// 	ProductName: product.ProductName,
+			// 	Quantity:    product.Quantity,
+			// 	Price:       product.Price,
+			// 	Total:       product.Total,
+			// }
 
-			productSales = append(productSales, newProduct)
+			productSales = append(productSales, product)
 		}
 
 	}
@@ -183,16 +183,16 @@ func GetProductNameTimePeriodSales(sales []Sales, productName string, startPerio
 	for _, product := range sales {
 		// TODO: answer here
 		if product.ProductName == productName && product.Date.After(*startPeriod) && product.Date.Before(endOfDay) {
-			newProduct := Sales{
-				Date:        product.Date,
-				Category:    product.Category,
-				ProductName: product.ProductName,
-				Quantity:    product.Quantity,
-				Price:       product.Price,
-				Total:       product.Total,
-			}
+			// newProduct := Sales{
+			// 	Date:        product.Date,
+			// 	Category:    product.Category,
+			// 	ProductName: product.ProductName,
+			// 	Quantity:    product.Quantity,
+			// 	Price:       product.Price,
+			// 	Total:       product.Total,
+			// }
 
-			productSales = append(productSales, newProduct)
+			productSales = append(productSales, product)
 		}
 	}
 	return productSales
