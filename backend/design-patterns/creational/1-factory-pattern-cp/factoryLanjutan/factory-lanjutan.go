@@ -65,8 +65,6 @@ func (m *Mappa) Produce(time time.Time) Content {
 		return &AnimeContent{Name: "Attack on Titan"}
 	} else if time.Weekday().String() == "Monday" {
 		return &AnimeContent{Name: "Jujutsu Kaisen"}
-	} else if time.Weekday().String() == "Tuesday" {
-		return &AnimeContent{Name: "Start Up"}
 	}
 	return nil
 }
