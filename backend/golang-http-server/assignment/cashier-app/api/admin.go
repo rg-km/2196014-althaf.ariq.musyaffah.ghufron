@@ -34,7 +34,6 @@ func (api *API) getDashboard(w http.ResponseWriter, req *http.Request) {
 
 	// TODO: answer here
 
-	ahnsdujhashdjhads
 	getSalesRequest := repository.GetSalesRequest{
 		ProductName: productName,
 		StartPeriod: &startPeriod,
