@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,16 +27,34 @@ var movies = map[int]Movie{
 }
 
 var MovieListHandler = func(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{}) // TODO: replace this
+	c.JSON(http.StatusOK, gin.H{
+		"data": movies,
+	}) // TODO: replace this
 }
 
 var MovieGetHandler = func(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{}) // TODO: replace this
+	id := c.Param("id")
+	//convert id to int
+	idInt, _ := strconv.Atoi(id)
+
+	if idInt > 4 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "not found",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": movies[idInt],
+	})
 }
 
 func GetRouter() *gin.Engine {
 	router := gin.Default()
 	// TODO: answer here
+	router.GET("/movie/list", MovieListHandler)
+	router.GET("/movie/get/:id", MovieGetHandler)
+
 	return router
 }
 
