@@ -19,15 +19,23 @@ func squareWorker(workerInput <-chan int, workerOutput chan<- int) {
 func createRequest(workerInput chan<- int, workerOutput <-chan int, wg *sync.WaitGroup) {
 	for i := 1; i < 100; i++ {
 		// TODO: answer here
+		workerInput <- i
+
 		go func(i int) {
 			// TODO: answer here
+			result += <-workerOutput
 
 			var res int
 
 			// TODO: answer here
+			wg.Wait()
 
 			//tambahkan res ke result. Selain itu gunakan juga sesuatu yang menghindari data race
 			// TODO: answer here
+			mu.Lock()
+			result += res
+			mu.Unlock()
+
 			fmt.Println(res)
 		}(i)
 	}

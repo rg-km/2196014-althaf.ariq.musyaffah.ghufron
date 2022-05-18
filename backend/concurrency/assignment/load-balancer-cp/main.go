@@ -20,12 +20,15 @@ func worker(in <-chan *Work, out chan<- *Work, number int) {
 	for w := range in {
 		w.data = fmt.Sprintf("worker %d accepted %s", number, w.data)
 		// TODO: answer here
+		out <- w
+
 	}
 }
 
 func createRequest(in chan<- *Work, number int) {
 	for {
 		// TODO: answer here
+		in <- &Work{data: fmt.Sprintf("request from client %d", number)}
 	}
 }
 
@@ -34,9 +37,11 @@ func receiver(out <-chan *Work) {
 		//pada bagian ini masukkan data dari channel out
 		//ke dalam map `data`
 		//gunakan mutex untuk mengamankan penulisan ke map secara concurrent
-
-		<-out // TODO: replace this
-		<-out
+		w := <-out
 		// TODO: answer here
+		mu.Lock()
+		data[w.data] = true
+		mu.Unlock()
+
 	}
 }
