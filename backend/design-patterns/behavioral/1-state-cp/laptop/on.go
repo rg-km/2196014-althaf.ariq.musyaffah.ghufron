@@ -16,4 +16,6 @@ func (o On) CanTurnOnLaptop() bool {
 
 func (o On) Sleep() {
 	// TODO: answer here
+	o.Laptop.CurrentState = "Sleeping"
+	o.Laptop.ChangeState(On{o.Laptop})
 }

@@ -1,7 +1,5 @@
 package perusahaan
 
-import "fmt"
-
 type CTO struct {
 	Subordinate []Employee
 }
@@ -11,5 +9,11 @@ func (c CTO) GetSalary() int {
 }
 
 func (c CTO) TotalDivisonSalary() int {
-	return 0 // TODO: replace this
+	total := 0
+	for _, subordinate := range c.Subordinate {
+		total += subordinate.TotalDivisonSalary()
+	}
+	totalDivisionSalary := c.GetSalary() + total
+	return totalDivisionSalary
+
 }
