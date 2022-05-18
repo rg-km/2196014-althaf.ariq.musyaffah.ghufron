@@ -33,7 +33,7 @@ func createRequest(workerInput chan<- int, workerOutput <-chan int, wg *sync.Wai
 			//tambahkan res ke result. Selain itu gunakan juga sesuatu yang menghindari data race
 			// TODO: answer here
 			mu.Lock()
-			result += res
+			res += result
 			mu.Unlock()
 
 			fmt.Println(res)
