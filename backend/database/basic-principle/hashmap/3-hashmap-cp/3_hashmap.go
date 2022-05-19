@@ -1,9 +1,5 @@
 package main
 
-import (
-	"strings"
-)
-
 type PrimaryKey int
 
 type SecondaryKey string
