@@ -22,9 +22,10 @@ func (r *EmployeeRepository) UpdateEmployee(updateEmployee *model.Employee) erro
 	// 2. Set the updated fields (first_name, last_name, email)
 	// TODO: answer here
 	sqlStmt := `
-	UPDATE employees
-	SET first_name = ?, last_name = ?, email = ?
-	WHERE id = ?`
+		UPDATE employees
+		SET first_name = ?, last_name = ?, email = ?
+		WHERE nik = ?
+	`
 
 	_, err := r.db.Exec(sqlStmt, updateEmployee.FirstName, updateEmployee.LastName, updateEmployee.Email, updateEmployee.NIK)
 	if err != nil {
