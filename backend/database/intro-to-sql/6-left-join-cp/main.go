@@ -15,13 +15,27 @@ func NewMovieRepository(db *sql.DB) *MovieRepository {
 }
 
 func (r *MovieRepository) FetchMoviesDirector() ([]model.MovieDirector, error) {
-	var sqlStmt string
+	//var sqlStmt string
 
 	// Task: Fetch all movies and their director
 	// Hint: Use LEFT JOIN
 	// See model.MovieDirector for the structure of the result
 
 	// TODO: answer here
+	//return all movies and their director
+	sqlStmt :=
+		`SELECT
+			m.id,
+			m.title,
+			m.description,
+			m.year,
+			d.name AS director_name
+		FROM
+			movies m
+		LEFT JOIN
+			directors d
+		ON
+			m.director_id = d.id`
 
 	rows, err := r.db.Query(sqlStmt)
 	if err != nil {

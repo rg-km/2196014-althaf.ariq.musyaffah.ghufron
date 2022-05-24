@@ -15,13 +15,28 @@ func NewMovieRepository(db *sql.DB) *MovieRepository {
 }
 
 func (r *MovieRepository) FetchMovies() ([]model.Movie, error) {
-	var sqlStmt string
+	//var sqlStmt string
 
 	// Task : create a query to fetch all movies
 	// 1. create a query to fetch all movies
 	// 2. use inner join to fetch all movies and their genres and their directors
 
 	// TODO: answer here
+	// return all movies
+	sqlStmt :=
+		`
+	SELECT
+		m.id
+		, m.title	
+		, m.description
+		, m.year
+		, g.name as genre_name
+		, d.name as director_name
+	FROM movies m
+	INNER JOIN genres g ON m.genre_id = g.id
+	INNER JOIN directors d ON m.director_id = d.id
+	ORDER BY m.id
+	`
 
 	rows, err := r.db.Query(sqlStmt)
 	if err != nil {
@@ -50,13 +65,26 @@ func (r *MovieRepository) FetchMovies() ([]model.Movie, error) {
 }
 
 func (r *MovieRepository) FetchMovieByID(id int64) (*model.Movie, error) {
-	var sqlStmt string
+	//var sqlStmt string
 
 	// Task : create a query to fetch a movie by id
 	// 1. create a query to fetch a movie by id
 	// 2. use inner join to fetch all movies and their genres and their directors
 
 	// TODO: answer here
+	sqlStmt := `
+	SELECT
+		m.id
+		, m.title	
+		, m.description
+		, m.year
+		, g.name as genre_name
+		, d.name as director_name
+	FROM movies m
+	INNER JOIN directors d ON m.director_id = d.id
+	INNER JOIN genres g ON m.genre_id = g.id
+	WHERE m.id = ?
+	ORDER BY m.id`
 
 	row := r.db.QueryRow(sqlStmt, id)
 
