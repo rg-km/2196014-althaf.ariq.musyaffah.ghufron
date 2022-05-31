@@ -36,14 +36,36 @@ func Migrate() (*sql.DB, error) {
 		panic(err)
 	}
 
-	sqlStmt := `CREATE TABLE ... ;` // TODO: replace this
+	sqlStmt := `CREATE TABLE IF NOT EXISTS unormal (
+		no_bon INTEGER,
+		nama_barang VARCHAR(10),
+		harga INTEGER,
+		jumlah INTEGER,
+		biaya INTEGER,
+		sub_total INTEGER,
+		discount INTEGER,
+		total INTEGER,
+		bayar INTEGER,
+		kembalian INTEGER,
+		kasir VARCHAR(10),
+		tanggal VARCHAR(10),
+		waktu VARCHAR(10)
+	) ;` // TODO: replace this
 
 	_, err = db.Exec(sqlStmt)
 	if err != nil {
 		return nil, err
 	}
 
-	_, err = db.Exec(`INSERT INTO ... VALUES ... ;`) // TODO: replace this
+	_, err = db.Exec(`INSERT INTO unormal (no_bon, nama_barang, harga, jumlah, biaya, sub_total, discount, total, bayar, kembalian, kasir, tanggal, waktu) 
+	VALUES 
+		(00001, "Disket", 4500, 3, 13500, 13500, 0, 0, 0, 0, "Rosi", "04-05-2022", "12:00:00"), 
+		("", "Refil Tinta", 22500, 1, 22500, 36000, 0,0,0,0, "", "", ""),
+		("", "CD Blank", 1500, 4, 6000, 42000, 0,0,0,0, "", "", ""),
+		("", "Mouse", 17500, 2, 35000, 77000, 0,77000,100000,23000, "", "", ""),
+		("00002", "Disket", 4500, 1, 4500, 4500, 0,0,0,0, "Dewi", "04-05-2022", "12:00:00"),
+		("", "Mouse", 17500, 1, 17500, 22000, 0,0,0,0, "", "", ""),
+		("", "Flash Disk", 100000, 1, 100000, 117500, 0,117500,117500,0, "", "", "") ;`) // TODO: replace this
 
 	if err != nil {
 		panic(err)
@@ -59,7 +81,7 @@ func checkLatestId(id int) (int, error) {
 		panic(err)
 	}
 
-	sqlStmt := `SELECT ... FROM ... WHERE ... = ?;` // TODO: replace this
+	sqlStmt := `SELECT COUNT(*) FROM unormal WHERE no_bon = ?;` // TODO: replace this
 
 	row := db.QueryRow(sqlStmt, id)
 	var latestId int
